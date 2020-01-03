@@ -51,9 +51,9 @@ class InstallationController extends Controller
         $inputdata['ip'] = $this->getClientIp();
         $installObj = new Installation();
         $install_num = $installObj->getInstallNo($inputdata['user_name'], $inputdata['purchase_code']);
-        if ($install_num > 5) {
-            return $this->sendError('Installation Expired');
-        }
+        // if ($install_num > 5) {
+        //     return $this->sendError('Installation Expired');
+        // }
         $inputdata['install_num'] = $install_num;
         $inputdata['verification_token'] = $this->generateVerificationToken($inputdata['user_name'].":".$inputdata['purchase_code']);
         $result = $installObj->createInstall($inputdata);
@@ -105,8 +105,9 @@ class InstallationController extends Controller
         $data = openssl_decrypt($first_encrypted,$method,$first_key,OPENSSL_RAW_DATA,$iv);
         $second_encrypted_new = hash_hmac('sha3-512', $first_encrypted, $second_key, TRUE);
         
-        if (hash_equals($second_encrypted,$second_encrypted_new))
-        return $data;
+        if (hash_equals($second_encrypted,$second_encrypted_new)){
+            return $data;
+        }
         
         return false;
     }
