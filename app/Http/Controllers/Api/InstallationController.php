@@ -67,7 +67,6 @@ class InstallationController extends Controller
         return Validator::make($data,[
             'user_name' => ['required', 'string', 'max:255'],
             'product_id' => ['required', 'string', 'exists:products,"code"'],
-            'mac'=>['required', 'string'],
             'purchase_code'=>['required', 'string']
         ]);
     }
