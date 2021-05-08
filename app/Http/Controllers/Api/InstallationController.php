@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Installation;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,13 +44,25 @@ class InstallationController extends Controller
     public function checkInstallation(Request $request)
     {
         $inputdata = $request->all();
-        
         $validation = $this->validateInstallation($inputdata);
         if ($validation->fails()) {
             return $this->sendError('Validation Error', $validation->errors());
         }
+        try {
+            $res = $this->checkPurchase($inputdata['purchase_code']);
+            if ($res->getStatusCode() != 200){
+                return $this->sendError('Invalid purchase code');
+            }
+        } catch(Exception $e) {
+            return $this->sendError('Invalid purchase code');
+        }
+        
         $inputdata['ip'] = $this->getClientIp();
         $installObj = new Installation();
+        $install = $installObj->getInstallationByNamePurchaseCode($inputdata['user_name'], $inputdata['purchase_code']);
+        if (!empty($install->expired)) {
+            return $this->sendError('Installation Expired');
+        }
         $install_num = $installObj->getInstallNo($inputdata['user_name'], $inputdata['purchase_code']);
         // if ($install_num > 5) {
         //     return $this->sendError('Installation Expired');

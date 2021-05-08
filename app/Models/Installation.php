@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Installation extends Model
 {
+    use HasFactory;
+    
     protected $guarded = [];
 
     public function getInstallationByNamePurchaseCode($user_name, $purchase_code)

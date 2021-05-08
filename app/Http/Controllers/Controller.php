@@ -12,7 +12,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, CommonTrait;
 
-    /**
+     /**
      * success response method.
      *
      * @return \Illuminate\Http\Response

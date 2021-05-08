@@ -14,7 +14,7 @@ class CreateInstallationsTable extends Migration
     public function up()
     {
         Schema::create('installations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->morphs('model');
             $table->string('user_name');
             $table->string('purchase_from')->nullable();

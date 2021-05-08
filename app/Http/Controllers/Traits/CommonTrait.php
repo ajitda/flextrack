@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Traits;
 
+use GuzzleHttp\Client;
+
 trait CommonTrait
 {
     public function getMac()
@@ -34,5 +36,17 @@ trait CommonTrait
         else
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
+    }
+
+    public function checkPurchase($purchase_code)
+    {
+        $client = new Client();
+        $url = "https://api.envato.com/v3/market/author/sale?code=".$purchase_code;
+        $res = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => 'Bearer fOXk6KmMtINX9Xm4NzXrwdD2NcJdia1r'
+            ]
+        ]);
+        return $res;
     }
 }
