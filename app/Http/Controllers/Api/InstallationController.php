@@ -64,9 +64,9 @@ class InstallationController extends Controller
             return $this->sendError('Installation Expired');
         }
         $install_num = $installObj->getInstallNo($inputdata['user_name'], $inputdata['purchase_code']);
-        // if ($install_num > 5) {
-        //     return $this->sendError('Installation Expired');
-        // }
+        if ($install_num > 3) {
+            return $this->sendError('Max Installation Reached, Please contact support.');
+        }
         $inputdata['install_num'] = $install_num;
         $inputdata['verification_token'] = $this->generateVerificationToken($inputdata['user_name'].":".$inputdata['purchase_code']);
         $result = $installObj->createInstall($inputdata);
