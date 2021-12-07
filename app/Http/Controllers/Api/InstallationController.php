@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Installation;
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,8 +54,11 @@ class InstallationController extends Controller
             if ($res->getStatusCode() != 200){
                 return $this->sendError('Invalid purchase code');
             }
-        } catch(Exception $e) {
-            return $this->sendError('Invalid purchase code');
+        } catch(\Exception $e) {
+            $response = $e->getResponse();
+            if($response->getStatusCode() != 504 ){
+                return $this->sendError('Invalid purchase code');
+            }
         }
         
         $inputdata['ip'] = $this->getClientIp();
